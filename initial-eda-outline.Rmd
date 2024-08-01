@@ -1,6 +1,6 @@
 ---
 title: "Initial EDA Basic Outline"
-author: "Deekshith Reddy"
+author: "Deekshith Reddy Bhoomireddy"
 output: html_notebook
 ---
 
