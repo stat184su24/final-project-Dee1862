@@ -1,41 +1,234 @@
 ---
 title: "Initial EDA Basic Outline"
-author: "Name of Student"
+author: "Name"
 output: html_notebook
 ---
 
-This is an outline for your Initial EDA. You can follow this outline, or you can modify it as you see fit. Do what works best for your project. 
 
-## Research Question 
+## Research Question: 
 
-State your specific research question and why it is interesting. 
+What is the relationship between the age and various performance metrics (awards, batting averages, strike rate, total runs, number of 50s and number of 100s) of T20I cricket players under the age of 35?
 
+```{r}
+#The required libraries
+library(dplyr)
+library(ggplot2)
+library(gridExtra)
+library(tidyverse)
 
-
-## Data Processing 
-
-#### Data Intake 
-
-Include R code and written explanation to import your **TWO** data sets.
-
-#### Data Wrangling 
-
-Include R code and written explanation for wangling your data (you can make multiple wrangled data sets). 
+```
 
 
+## Data Intake and Processing:
+In this section, we will import the datasets (downloaded from <https://data.world/raghav333/cricket-players-espn>). These data sets are contain the list of all cricket players scraped from <https://www.espncricinfo.com>. After importing the data sets, we will inspect the data sets and compare them to create a new filtered data set. The purpose of these data sets is to analyze how age affects the player performance across various metrics. This analysis and its outcomes are valuable to team selectors to make efficient decisions in matters related to player selection for the T20I team.
+
+```{r}
+# Import the data sets
+old_cricket_data <- read_csv("cricket_data.csv", show_col_types = FALSE)
+cricket_data <- read_csv("SuperCleaned.csv", show_col_types = FALSE)
+
+#Inspect the data sets
+glimpse(old_cricket_data)
+View(old_cricket_data)
+
+glimpse(cricket_data)
+View(cricket_data)
+
+```
+
+After inspecting the data set I came to a conslusion that it is better to move forward with the "SuperCleaned.csv" file only, because the "cricket_data.csv" file consists of a lot of unnecessary and missing data.
 
 
-## Data Visualization
+## Data Wrangling:
+In this section, we will clean and filter the data. This includes converting required columns to numeric data types and filtering the data to include only players who are 35 years or younger (because the average retirement age of a T20I cricketer is around 35 years).
 
-#### Plot 1
+```{r}
 
-Include R code to make one data visualization (I would encourage you to use 3 or more variables). Include a brief written description of what your graph shows. Is this graph helpful in answering your research question? If it is helpful, will you need to add/modify anything in this graph in the final report? 
+# Cleaning the data set
+cricket_data_clean <- 
+  cricket_data %>%
+  filter(!is.na(BATTING_T20Is_Ave) & !is.na(Age) & !is.na(BATTING_T20Is_SR) & !is.na(BATTING_T20Is_Runs)) %>%
+  mutate(
+    Age = as.numeric(Age),
+    Total_Runs = as.numeric(BATTING_T20Is_Runs),
+    BATTING_T20Is_Ave = as.numeric(BATTING_T20Is_Ave),
+    BATTING_T20Is_SR = as.numeric(BATTING_T20Is_SR),
+    BATTING_T20Is_100 = as.numeric(BATTING_T20Is_100),
+    BATTING_T20Is_50 = as.numeric(BATTING_T20Is_50)
+  )
 
-#### Plot 2
+# Filter the new data to include only cricketers who are 35 years old or younger
+cricket_data_upto_35 <- cricket_data_clean %>%
+  filter(Age <= 35)
 
-Include R code to make one data visualization (I would encourage you to use 3 or more variables). Include a brief written description of what your graph shows. Is this graph helpful in answering your research question? If it is helpful, will you need to add/modify anything in this graph in the final report? 
+
+```
 
 
-## Conclusion
 
-Include your initial intuition as to what the answer to your research question is using the data sets and visualizations you created. 
+## Data Visualization:
+In this section, we will create various visualizations to explore the relationship between age and various performance metrics in T20I cricket players under the age of 35. All the various performace metrics are the variables:
+- Age: A numeric variable which represents the age of the players.
+- AWARDS: A list which consists of all the awards received by each player in T20I matches. 
+- BATTING_T20Is_Ave: A numeric variable which represents the batting average of each player in T20I matches.
+- BATTING_T20Is_SR: A numeric variable which represents the strike rate of each player in T20I matches.
+- Total_Runs: A numeric variable which represents the total number of runs of each player in T20I matches.
+- BATTING_T20Is_50: A numeric variable which represents the total number of half-centuries of each player in T20I matches.
+- BATTING_T20Is_100: A numeric variable which represents the total number of centuries of each player in T20I matches.
+
+
+- Bar graph: Age vs Total Number of Awards
+In this section, we will plot a bar graph to show the relationship between the age and total number of awards of a T20I cricket player.
+
+```{r}
+
+#Filter the data set for the awards.
+awards_by_age_group_upto_35 <- 
+  cricket_data_upto_35 %>%
+  filter(!is.na(NAME) & !is.na(Age) & !is.na(AWARDS)) %>%
+  group_by(Age_Group = cut(Age, breaks = seq(20, 35, by = 3))) %>%
+  summarise(Total_Awards = n())
+
+#Plotting the new data set.
+bar_age_vs_awards <- 
+  awards_by_age_group_upto_35 %>%
+  ggplot(aes(x = Age_Group, y = Total_Awards)) +
+  geom_bar(stat = "identity", fill = 'skyblue') +
+  labs(title = "Number of Awards by Age Group",
+       x = "Age Group",
+       y = "Total Awards")
+
+bar_age_vs_awards
+
+```
+
+
+- Scatter plot: Age vs Batting Average
+In this section, we will plot a scatter plot to show the relationship between the age and batting average of a T20I cricket player.
+
+```{r}
+scatter_age_vs_avg <- 
+  cricket_data_upto_35 %>%
+  ggplot(aes(x = Age, y = BATTING_T20Is_Ave)) +
+  geom_point(color = 'blue') +
+  geom_smooth(method = "lm", formula = y ~ x, col = "red") +
+  labs(title = "Age vs Batting Average",
+       x = "Age",
+       y = "Batting Average")
+
+scatter_age_vs_avg
+
+
+```
+
+
+- Scatter plot: Age vs Strike Rate
+In this section, we will plot a scatter plot to show the relationship between the age and strike rate of a T20I cricket player.
+
+```{r}
+scatter_age_vs_sr <- 
+  cricket_data_upto_35 %>%
+  ggplot(aes(x = Age, y = BATTING_T20Is_SR)) +
+  geom_point(color = 'green') +
+  geom_smooth(method = "lm", formula = y ~ x, col = "red") +
+  labs(title = "Age vs Strike Rate",
+       x = "Age",
+       y = "Strike Rate")
+
+scatter_age_vs_sr
+
+
+```
+
+
+- Scatter plot: Age vs Total Runs
+In this section, we will plot a scatter plot to show the relationship between the age and total runs of a T20I cricket player.
+
+```{r}
+scatter_age_vs_runs <- 
+  cricket_data_upto_35 %>%
+  ggplot(aes(x = Age, y = Total_Runs)) +
+  geom_point(color = 'purple') +
+  geom_smooth(method = "lm", formula = y ~ x, col = "red") +
+  labs(title = "Age vs Total Runs",
+       x = "Age",
+       y = "Total Runs")
+
+scatter_age_vs_runs
+
+
+```
+
+
+
+- Scatter plot: Age vs Number of 50s
+In this section, we will plot a scatter plot to show the relationship between the age and number of 50s of a T20I cricket player.
+
+```{r}
+scatter_age_vs_50s <- 
+  cricket_data_upto_35 %>%
+  ggplot(aes(x = Age, y = BATTING_T20Is_50)) +
+  geom_point(color = 'purple') +
+  geom_smooth(method = "lm", formula = y ~ x, col = "red") +
+  labs(title = "Age vs Number of 50s",
+       x = "Age",
+       y = "Total 50s")
+
+scatter_age_vs_50s
+
+
+```
+
+
+- Scatter plot: Age vs Number of 100s
+In this section, we will plot a scatter plot to show the relationship between the age and number of 100s of a T20I cricket player.
+
+```{r}
+scatter_age_vs_100s <- 
+  cricket_data_upto_35 %>%
+  ggplot(aes(x = Age, y = BATTING_T20Is_100)) +
+  geom_point(color = 'purple') +
+  geom_smooth(method = "lm", formula = y ~ x, col = "red") +
+  labs(title = "Age vs Number of 100s",
+       x = "Age",
+       y = "Total 100s")
+
+scatter_age_vs_100s
+
+
+```
+
+
+## Combined Visualization:
+In this section, we will display all the graphs (or visualizations) together. This combined visualization will help us in comparing various performance metrics against age.
+
+
+```{r}
+grid.arrange(
+  scatter_age_vs_avg, scatter_age_vs_sr, scatter_age_vs_runs,
+  scatter_age_vs_50s, scatter_age_vs_100s, bar_age_vs_awards,
+  nrow = 3
+)
+
+```
+
+
+## Conclusion:
+In this analysis, we investigated the relationship between age and various performance metrics of T20I cricket player who are 35 years old or younger.From the visualization, it can be concluded that:
+
+- Age vs Batting Average, Age vs Total Runs and Age vs Number of 50s: 
+The scatter plot of age versus batting average, total runs and number of 50s demonstrates a slight positive trend. This suggests that the batting averages, total runs and number of 50s of the players increases as they get older. However, it is important to note that the trend is positive and not steep, meaning that their are incremental improvements rather than drastic changes with age.
+
+- Age vs Strike Rate:
+The scatter plot of age vs strike rate also shows a positive trend. This indicates that older players tend to have more strike rate. Therefore, older players may have higher strike rate due to their high experience in reading the bowlers and the field conditions, leading to more effective shots and scores.
+
+
+- Age vs Number of 100s: 
+The scatter plot of age vs number of 100s shows a trend line which appers to have a slope close to zero. This indicates that the number of 100s scored is relatively consistent across all the age groups less than or equal to 35 years. From this we can also interpret that as the age of the players increases, their experience and scores increases but their ability to convert these experience and scores into centuries almost stays the same.
+
+- Age vs Number of Awards: 
+The bar graph of the age vs number of awards indicates that cricketers between the age group of 26 to 29 years receive more awards than any other age groups equal to or less than 35. Meaning that this age range might be the peak period of many of the cricketers, leading to prestigious awards and recognition.
+
+
+To summarize, we can conclude that age positively impacts certain performance metrics like batting averages, strike rates, total runs and number of 50s. These improvements and positive impact can be attributed to experience and developing skills which come with playing for many years in international cricket. However, the ability to score centuries in T20Is remains relatively unaffected by age, highlighting the difficult in achieving such milestones. Moreover, impactful phase of the career of a cricketer is between 26 to 29 years. Such insights are invaluable for the T20I selection team of every team in understanding the secrets of forming a balanced and powerful team of T20I players.
+
