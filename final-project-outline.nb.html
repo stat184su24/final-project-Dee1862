@@ -9,10 +9,10 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
-<meta name="author" content="Names of all group members" />
+<meta name="author" content="Deekshith Reddy Bhoomireddy" />
 
 
-<title>Final Project Basic Outline</title>
+<title>Initial EDA Basic Outline</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -1512,7 +1512,7 @@ window.initializeCodeFolding = function(show) {
     $(this).detach().appendTo(div);
 
     // add a show code button right above
-    var showCodeText = $('<span>' + (showThis ? 'Hide' : 'Code') + '</span>');
+    var showCodeText = $('<span>' + (showThis ? 'Hide' : 'Show') + '</span>');
     var showCodeButton = $('<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm code-folding-btn pull-right float-right"></button>');
     showCodeButton.append(showCodeText);
     showCodeButton
@@ -1538,7 +1538,7 @@ window.initializeCodeFolding = function(show) {
     //   * Change text
     //   * add a class for intermediate states styling
     div.on('hide.bs.collapse', function () {
-      showCodeText.text('Code');
+      showCodeText.text('Show');
       showCodeButton.addClass('btn-collapsing');
     });
     div.on('hidden.bs.collapse', function () {
@@ -1747,48 +1747,377 @@ display: none;
 
 
 
-<h1 class="title toc-ignore">Final Project Basic Outline</h1>
-<h4 class="author">Names of all group members</h4>
+<h1 class="title toc-ignore">Initial EDA Basic Outline</h1>
+<h4 class="author">Deekshith Reddy Bhoomireddy</h4>
 
 </div>
 
 
 <!-- rnb-text-begin -->
-<p>This is an outline for your final project. You can follow this
-outline, or you can modify it as you see fit. Do what works best for
-your project.</p>
 <div id="research-question" class="section level2">
-<h2>Research Question</h2>
-<p>State your general specific question and why it is interesting.</p>
+<h2>Research Question:</h2>
+<p>What is the relationship between the age and various performance
+metrics (awards, batting averages, strike rate, total runs, number of
+50s and number of 100s) of T20I cricket players under the age of 35?</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI1RoZSByZXF1aXJlZCBsaWJyYXJpZXNcbmxpYnJhcnkoZHBseXIpXG5saWJyYXJ5KGdncGxvdDIpXG5saWJyYXJ5KGdyaWRFeHRyYSlcbmxpYnJhcnkodGlkeXZlcnNlKVxuXG5gYGAifQ== -->
+<pre class="r"><code>#The required libraries
+library(dplyr)
+library(ggplot2)
+library(gridExtra)
+library(tidyverse)
+</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
 </div>
-<div id="data-processing" class="section level2">
-<h2>Data Processing</h2>
-<div id="data-intake" class="section level4">
-<h4>Data Intake</h4>
-<p>Include R code and written explanation to import your
-<strong>TWO</strong> data sets.</p>
+<div id="data-intake-and-processing" class="section level2">
+<h2>Data Intake and Processing:</h2>
+<p>In this section, we will import the datasets (downloaded from <a href="https://data.world/raghav333/cricket-players-espn" class="uri">https://data.world/raghav333/cricket-players-espn</a>).
+These data sets are contain the list of all cricket players scraped from
+<a href="https://www.espncricinfo.com" class="uri">https://www.espncricinfo.com</a>. After importing the data
+sets, we will inspect the data sets and compare them to create a new
+filtered data set. The purpose of these data sets is to analyze how age
+affects the player performance across various metrics. This analysis and
+its outcomes are valuable to team selectors to make efficient decisions
+in matters related to player selection for the T20I team.</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBJbXBvcnQgdGhlIGRhdGEgc2V0c1xub2xkX2NyaWNrZXRfZGF0YSA8LSByZWFkX2NzdihcImNyaWNrZXRfZGF0YS5jc3ZcIiwgc2hvd19jb2xfdHlwZXMgPSBGQUxTRSlcblxuYGBgIn0= -->
+<pre class="r"><code># Import the data sets
+old_cricket_data &lt;- read_csv(&quot;cricket_data.csv&quot;, show_col_types = FALSE)
+</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiV2FybmluZzogT25lIG9yIG1vcmUgcGFyc2luZyBpc3N1ZXMsIGNhbGwgYHByb2JsZW1zKClgIG9uIHlvdXIgZGF0YSBmcmFtZSBmb3IgZGV0YWlscywgZS5nLjpcbiAgZGF0IDwtIHZyb29tKC4uLilcbiAgcHJvYmxlbXMoZGF0KVxuIn0= -->
+<pre><code>Warning: One or more parsing issues, call `problems()` on your data frame for details, e.g.:
+  dat &lt;- vroom(...)
+  problems(dat)</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>After inspecting the data set I came to a conslusion that it is
+better to move forward with the “SuperCleaned.csv” file only, because
+the “cricket_data.csv” file consists of a lot of unnecessary and missing
+data.</p>
 </div>
-<div id="data-wrangling" class="section level4">
-<h4>Data Wrangling</h4>
-<p>Include R code and written explanation for wangling your data (you
-can make multiple wrangled data sets).</p>
-</div>
+<div id="data-wrangling" class="section level2">
+<h2>Data Wrangling:</h2>
+<p>In this section, we will clean and filter the data. This includes
+converting required columns to numeric data types and filtering the data
+to include only players who are 35 years or younger (because the average
+retirement age of a T20I cricketer is around 35 years).</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuXG4jIFNlbGVjdCByZWxldmFudCBjb2x1bW5zXG5zdXBlcl9jbGVhbmVkX2RhdGEgPC0gY3JpY2tldF9kYXRhICU+JSBzZWxlY3QoTkFNRSwgQVdBUkRTLCBCQVRUSU5HX1QyMElzXzEwMCwgQkFUVElOR19UMjBJc181MCwgQkFUVElOR19UMjBJc19BdmUsIEJBVFRJTkdfVDIwSXNfUnVucywgQkFUVElOR19UMjBzX0F2ZSwgQkFUVElOR19UMjBJc19TUiwgQWdlKVxuY3JpY2tldF9kYXRhX3JvbGUgPC0gb2xkX2NyaWNrZXRfZGF0YSAlPiUgc2VsZWN0KE5BTUUsIGBQbGF5aW5nIHJvbGVgKVxuXG4jIE1lcmdlIHRoZSBkYXRhc2V0c1xubWVyZ2VkX2RhdGEgPC0gXG4gIHN1cGVyX2NsZWFuZWRfZGF0YSAlPiVcbiAgaW5uZXJfam9pbihjcmlja2V0X2RhdGFfcm9sZSwgYnkgPSBcIk5BTUVcIilcblxuIyBDbGVhbmluZyB0aGUgZGF0YSBzZXRcbmNyaWNrZXRfZGF0YV9jbGVhbiA8LSBcbiAgbWVyZ2VkX2RhdGEgJT4lXG4gIHNlbGVjdChjKE5BTUUsIEFnZSwgQVdBUkRTLCBCQVRUSU5HX1QyMElzXzEwMCwgQkFUVElOR19UMjBJc181MCwgQkFUVElOR19UMjBJc19BdmUsIEJBVFRJTkdfVDIwSXNfUnVucywgQkFUVElOR19UMjBzX0F2ZSwgQkFUVElOR19UMjBJc19TUiwgYFBsYXlpbmcgcm9sZWApKSAlPiVcbiAgZmlsdGVyKCFpcy5uYShCQVRUSU5HX1QyMElzX0F2ZSkgJiAhaXMubmEoQWdlKSAmICFpcy5uYShCQVRUSU5HX1QyMElzX1NSKSAmICFpcy5uYShCQVRUSU5HX1QyMElzX1J1bnMpICYgIWlzLm5hKEJBVFRJTkdfVDIwSXNfMTAwKSAmICFpcy5uYShCQVRUSU5HX1QyMElzXzUwKSkgJT4lXG4gIG11dGF0ZShcbiAgICBBZ2UgPSBhcy5udW1lcmljKEFnZSksXG4gICAgVG90YWxfUnVucyA9IGFzLm51bWVyaWMoQkFUVElOR19UMjBJc19SdW5zKSxcbiAgICBCQVRUSU5HX1QyMElzX0F2ZSA9IGFzLm51bWVyaWMoQkFUVElOR19UMjBJc19BdmUpLFxuICAgIEJBVFRJTkdfVDIwSXNfU1IgPSBhcy5udW1lcmljKEJBVFRJTkdfVDIwSXNfU1IpLFxuICAgIEJBVFRJTkdfVDIwSXNfMTAwID0gYXMubnVtZXJpYyhCQVRUSU5HX1QyMElzXzEwMCksXG4gICAgQkFUVElOR19UMjBJc181MCA9IGFzLm51bWVyaWMoQkFUVElOR19UMjBJc181MClcbiAgKVxuXG4jIEZpbHRlciB0aGUgbmV3IGRhdGEgdG8gaW5jbHVkZSBvbmx5IGNyaWNrZXRlcnMgd2hvIGFyZSAzNSB5ZWFycyBvbGQgb3IgeW91bmdlclxuY3JpY2tldF9kYXRhX3VwdG9fMzUgPC0gY3JpY2tldF9kYXRhX2NsZWFuICU+JVxuICBmaWx0ZXIoQWdlIDw9IDM1KVxuXG5gYGAifQ== -->
+<pre class="r"><code>
+# Select relevant columns
+super_cleaned_data &lt;- cricket_data %&gt;% select(NAME, AWARDS, BATTING_T20Is_100, BATTING_T20Is_50, BATTING_T20Is_Ave, BATTING_T20Is_Runs, BATTING_T20s_Ave, BATTING_T20Is_SR, Age)
+cricket_data_role &lt;- old_cricket_data %&gt;% select(NAME, `Playing role`)
+
+# Merge the datasets
+merged_data &lt;- 
+  super_cleaned_data %&gt;%
+  inner_join(cricket_data_role, by = &quot;NAME&quot;)
+
+# Cleaning the data set
+cricket_data_clean &lt;- 
+  merged_data %&gt;%
+  select(c(NAME, Age, AWARDS, BATTING_T20Is_100, BATTING_T20Is_50, BATTING_T20Is_Ave, BATTING_T20Is_Runs, BATTING_T20s_Ave, BATTING_T20Is_SR, `Playing role`)) %&gt;%
+  filter(!is.na(BATTING_T20Is_Ave) &amp; !is.na(Age) &amp; !is.na(BATTING_T20Is_SR) &amp; !is.na(BATTING_T20Is_Runs) &amp; !is.na(BATTING_T20Is_100) &amp; !is.na(BATTING_T20Is_50)) %&gt;%
+  mutate(
+    Age = as.numeric(Age),
+    Total_Runs = as.numeric(BATTING_T20Is_Runs),
+    BATTING_T20Is_Ave = as.numeric(BATTING_T20Is_Ave),
+    BATTING_T20Is_SR = as.numeric(BATTING_T20Is_SR),
+    BATTING_T20Is_100 = as.numeric(BATTING_T20Is_100),
+    BATTING_T20Is_50 = as.numeric(BATTING_T20Is_50)
+  )
+
+# Filter the new data to include only cricketers who are 35 years old or younger
+cricket_data_upto_35 &lt;- cricket_data_clean %&gt;%
+  filter(Age &lt;= 35)
+</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
 </div>
 <div id="data-visualization" class="section level2">
-<h2>Data Visualization</h2>
-<p>Include R code and written explanation for your data visualization(s)
-with at least 3 variables. You must have <strong>at least</strong> one
-graph. You may have more than one (I would encourage you to have more
-than one).</p>
+<h2>Data Visualization:</h2>
+<p>In this section, we will create various visualizations to explore the
+relationship between age and various performance metrics in T20I cricket
+players under the age of 35. All the various performace metrics are the
+variables: - Age: A numeric variable which represents the age of the
+players. - AWARDS: A list which consists of all the awards received by
+each player in T20I matches. - BATTING_T20Is_Ave: A numeric variable
+which represents the batting average of each player in T20I matches. -
+BATTING_T20Is_SR: A numeric variable which represents the strike rate of
+each player in T20I matches. - Total_Runs: A numeric variable which
+represents the total number of runs of each player in T20I matches. -
+BATTING_T20Is_50: A numeric variable which represents the total number
+of half-centuries of each player in T20I matches. - BATTING_T20Is_100: A
+numeric variable which represents the total number of centuries of each
+player in T20I matches. - Playing role: A categorical variable which
+represents the primary role of the player in the team.</p>
+<ul>
+<li>Bar graph: Player role vs Total Number of Awards In this section, we
+will plot a bar graph to show the relationship between the player role
+and total number of awards of a T20I cricket player.</li>
+</ul>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI0ZpbHRlciB0aGUgZGF0YSBzZXQgZm9yIHRoZSBhd2FyZHMgYW5kIHRoZSBwbGF5ZXIgcm9sZS5cbmF3YXJkc19ieV9wbGF5ZXJfcm9sZSA8LSBjcmlja2V0X2RhdGFfdXB0b18zNSAlPiVcbiAgZmlsdGVyKCFpcy5uYShOQU1FKSAmICFpcy5uYShgUGxheWluZyByb2xlYCkgJiAhaXMubmEoQVdBUkRTKSkgJT4lXG4gIGZpbHRlcighYFBsYXlpbmcgcm9sZWAgJWluJSBjKCdCYXRzbWFuLCBCYXRzbWFuJywgJ1dpY2tldGtlZXBlciwgV2lja2V0a2VlcGVyJykpICU+JVxuICBncm91cF9ieShgUGxheWluZyByb2xlYCkgJT4lXG4gIHN1bW1hcmlzZShUb3RhbF9Bd2FyZHMgPSBuKCkpICU+JVxuICBhcnJhbmdlKGRlc2MoVG90YWxfQXdhcmRzKSlcblxuIyBDcmVhdGVzIHRoZSBiYXIgY2hhcnQuXG5iYXJfcGxheWVyX3JvbGVfdnNfYXdhcmRzIDwtIFxuICBhd2FyZHNfYnlfcGxheWVyX3JvbGUgJT4lXG4gIGdncGxvdChhZXMoeCA9IHJlb3JkZXIoYFBsYXlpbmcgcm9sZWAsIFRvdGFsX0F3YXJkcyksIHkgPSBUb3RhbF9Bd2FyZHMpKSArXG4gIGdlb21fYmFyKHN0YXQgPSBcImlkZW50aXR5XCIsIGZpbGwgPSAnc2t5Ymx1ZScpICtcbiAgbGFicyh0aXRsZSA9IFwiUGxheWVyIFJvbGUgdnMgTnVtYmVyIG9mIEF3YXJkc1wiLFxuICAgICAgIHggPSBcIlBsYXllciBSb2xlXCIsXG4gICAgICAgeSA9IFwiVG90YWwgQXdhcmRzXCIpICtcbiAgdGhlbWUoYXhpcy50ZXh0LnggPSBlbGVtZW50X3RleHQoYW5nbGUgPSA0NSwgaGp1c3QgPSAxKSlcblxuIyBEaXNwbGF5cyB0aGUgcGxvdC5cbmJhcl9wbGF5ZXJfcm9sZV92c19hd2FyZHNcblxuYGBgIn0= -->
+<pre class="r"><code>#Filter the data set for the awards and the player role.
+awards_by_player_role &lt;- cricket_data_upto_35 %&gt;%
+  filter(!is.na(NAME) &amp; !is.na(`Playing role`) &amp; !is.na(AWARDS)) %&gt;%
+  filter(!`Playing role` %in% c(&#39;Batsman, Batsman&#39;, &#39;Wicketkeeper, Wicketkeeper&#39;)) %&gt;%
+  group_by(`Playing role`) %&gt;%
+  summarise(Total_Awards = n()) %&gt;%
+  arrange(desc(Total_Awards))
+
+# Creates the bar chart.
+bar_player_role_vs_awards &lt;- 
+  awards_by_player_role %&gt;%
+  ggplot(aes(x = reorder(`Playing role`, Total_Awards), y = Total_Awards)) +
+  geom_bar(stat = &quot;identity&quot;, fill = &#39;skyblue&#39;) +
+  labs(title = &quot;Player Role vs Number of Awards&quot;,
+       x = &quot;Player Role&quot;,
+       y = &quot;Total Awards&quot;) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+# Displays the plot.
+bar_player_role_vs_awards
+</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<ul>
+<li>Bar graph: Age vs Total Number of Awards In this section, we will
+plot a bar graph to show the relationship between the age and total
+number of awards of a T20I cricket player.</li>
+</ul>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuXG4jRmlsdGVyIHRoZSBkYXRhIHNldCBmb3IgdGhlIGF3YXJkcyBhbmQgYWdlLlxuYXdhcmRzX2J5X2FnZV9ncm91cF91cHRvXzM1IDwtIFxuICBjcmlja2V0X2RhdGFfdXB0b18zNSAlPiVcbiAgZmlsdGVyKCFpcy5uYShOQU1FKSAmICFpcy5uYShBZ2UpICYgIWlzLm5hKEFXQVJEUykpICU+JVxuICBncm91cF9ieShBZ2VfR3JvdXAgPSBjdXQoQWdlLCBicmVha3MgPSBzZXEoMjAsIDM1LCBieSA9IDMpKSkgJT4lXG4gIHN1bW1hcmlzZShUb3RhbF9Bd2FyZHMgPSBuKCkpXG5cbiMgQ3JlYXRlcyB0aGUgYmFyIGNoYXJ0LlxuYmFyX2FnZV92c19hd2FyZHMgPC0gXG4gIGF3YXJkc19ieV9hZ2VfZ3JvdXBfdXB0b18zNSAlPiVcbiAgZ2dwbG90KGFlcyh4ID0gQWdlX0dyb3VwLCB5ID0gVG90YWxfQXdhcmRzKSkgK1xuICBnZW9tX2JhcihzdGF0ID0gXCJpZGVudGl0eVwiLCBmaWxsID0gJ3NreWJsdWUnKSArXG4gIGxhYnModGl0bGUgPSBcIkFnZSBHcm91cCB2cyBOdW1iZXIgb2YgQXdhcmRzXCIsXG4gICAgICAgeCA9IFwiQWdlIEdyb3VwXCIsXG4gICAgICAgeSA9IFwiVG90YWwgQXdhcmRzXCIpXG5cbiMgRGlzcGxheXMgdGhlIHBsb3QuXG5iYXJfYWdlX3ZzX2F3YXJkc1xuXG5gYGAifQ== -->
+<pre class="r"><code>
+#Filter the data set for the awards and age.
+awards_by_age_group_upto_35 &lt;- 
+  cricket_data_upto_35 %&gt;%
+  filter(!is.na(NAME) &amp; !is.na(Age) &amp; !is.na(AWARDS)) %&gt;%
+  group_by(Age_Group = cut(Age, breaks = seq(20, 35, by = 3))) %&gt;%
+  summarise(Total_Awards = n())
+
+# Creates the bar chart.
+bar_age_vs_awards &lt;- 
+  awards_by_age_group_upto_35 %&gt;%
+  ggplot(aes(x = Age_Group, y = Total_Awards)) +
+  geom_bar(stat = &quot;identity&quot;, fill = &#39;skyblue&#39;) +
+  labs(title = &quot;Age Group vs Number of Awards&quot;,
+       x = &quot;Age Group&quot;,
+       y = &quot;Total Awards&quot;)
+
+# Displays the plot.
+bar_age_vs_awards
+</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<ul>
+<li>Scatter plot: Age vs Batting Average In this section, we will plot a
+scatter plot to show the relationship between the age and batting
+average of a T20I cricket player.</li>
+</ul>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBDcmVhdGVzIHRoZSBzY2F0dGVyIHBsb3QuXG5zY2F0dGVyX2FnZV92c19hdmcgPC0gXG4gIGNyaWNrZXRfZGF0YV91cHRvXzM1ICU+JVxuICBnZ3Bsb3QoYWVzKHggPSBBZ2UsIHkgPSBCQVRUSU5HX1QyMElzX0F2ZSkpICtcbiAgZ2VvbV9wb2ludChjb2xvciA9ICdwdXJwbGUnKSArXG4gIGdlb21fc21vb3RoKG1ldGhvZCA9IFwibG1cIiwgZm9ybXVsYSA9IHkgfiB4LCBjb2wgPSBcInJlZFwiKSArXG4gIGxhYnModGl0bGUgPSBcIkFnZSB2cyBCYXR0aW5nIEF2ZXJhZ2VcIixcbiAgICAgICB4ID0gXCJBZ2VcIixcbiAgICAgICB5ID0gXCJCYXR0aW5nIEF2ZXJhZ2VcIilcblxuIyBEaXNwbGF5cyB0aGUgcGxvdC5cbnNjYXR0ZXJfYWdlX3ZzX2F2Z1xuXG5cbmBgYCJ9 -->
+<pre class="r"><code># Creates the scatter plot.
+scatter_age_vs_avg &lt;- 
+  cricket_data_upto_35 %&gt;%
+  ggplot(aes(x = Age, y = BATTING_T20Is_Ave)) +
+  geom_point(color = &#39;purple&#39;) +
+  geom_smooth(method = &quot;lm&quot;, formula = y ~ x, col = &quot;red&quot;) +
+  labs(title = &quot;Age vs Batting Average&quot;,
+       x = &quot;Age&quot;,
+       y = &quot;Batting Average&quot;)
+
+# Displays the plot.
+scatter_age_vs_avg
+</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<ul>
+<li>Scatter plot: Age vs Strike Rate In this section, we will plot a
+scatter plot to show the relationship between the age and strike rate of
+a T20I cricket player.</li>
+</ul>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBDcmVhdGVzIHRoZSBzY2F0dGVyIHBsb3QuXG5zY2F0dGVyX2FnZV92c19zciA8LSBcbiAgY3JpY2tldF9kYXRhX3VwdG9fMzUgJT4lXG4gIGdncGxvdChhZXMoeCA9IEFnZSwgeSA9IEJBVFRJTkdfVDIwSXNfU1IpKSArXG4gIGdlb21fcG9pbnQoY29sb3IgPSAncHVycGxlJykgK1xuICBnZW9tX3Ntb290aChtZXRob2QgPSBcImxtXCIsIGZvcm11bGEgPSB5IH4geCwgY29sID0gXCJyZWRcIikgK1xuICBsYWJzKHRpdGxlID0gXCJBZ2UgdnMgU3RyaWtlIFJhdGVcIixcbiAgICAgICB4ID0gXCJBZ2VcIixcbiAgICAgICB5ID0gXCJTdHJpa2UgUmF0ZVwiKVxuXG4jIERpc3BsYXlzIHRoZSBwbG90Llxuc2NhdHRlcl9hZ2VfdnNfc3JcblxuXG5gYGAifQ== -->
+<pre class="r"><code># Creates the scatter plot.
+scatter_age_vs_sr &lt;- 
+  cricket_data_upto_35 %&gt;%
+  ggplot(aes(x = Age, y = BATTING_T20Is_SR)) +
+  geom_point(color = &#39;purple&#39;) +
+  geom_smooth(method = &quot;lm&quot;, formula = y ~ x, col = &quot;red&quot;) +
+  labs(title = &quot;Age vs Strike Rate&quot;,
+       x = &quot;Age&quot;,
+       y = &quot;Strike Rate&quot;)
+
+# Displays the plot.
+scatter_age_vs_sr
+</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<ul>
+<li>Scatter plot: Age vs Total Runs In this section, we will plot a
+scatter plot to show the relationship between the age and total runs of
+a T20I cricket player.</li>
+</ul>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBDcmVhdGVzIHRoZSBzY2F0dGVyIHBsb3QuXG5zY2F0dGVyX2FnZV92c19ydW5zIDwtIFxuICBjcmlja2V0X2RhdGFfdXB0b18zNSAlPiVcbiAgZ2dwbG90KGFlcyh4ID0gQWdlLCB5ID0gVG90YWxfUnVucykpICtcbiAgZ2VvbV9wb2ludChjb2xvciA9ICdwdXJwbGUnKSArXG4gIGdlb21fc21vb3RoKG1ldGhvZCA9IFwibG1cIiwgZm9ybXVsYSA9IHkgfiB4LCBjb2wgPSBcInJlZFwiKSArXG4gIGxhYnModGl0bGUgPSBcIkFnZSB2cyBUb3RhbCBSdW5zXCIsXG4gICAgICAgeCA9IFwiQWdlXCIsXG4gICAgICAgeSA9IFwiVG90YWwgUnVuc1wiKVxuXG4jIERpc3BsYXlzIHRoZSBwbG90Llxuc2NhdHRlcl9hZ2VfdnNfcnVuc1xuXG5cbmBgYCJ9 -->
+<pre class="r"><code># Creates the scatter plot.
+scatter_age_vs_runs &lt;- 
+  cricket_data_upto_35 %&gt;%
+  ggplot(aes(x = Age, y = Total_Runs)) +
+  geom_point(color = &#39;purple&#39;) +
+  geom_smooth(method = &quot;lm&quot;, formula = y ~ x, col = &quot;red&quot;) +
+  labs(title = &quot;Age vs Total Runs&quot;,
+       x = &quot;Age&quot;,
+       y = &quot;Total Runs&quot;)
+
+# Displays the plot.
+scatter_age_vs_runs
+</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<ul>
+<li>Scatter plot: Age vs Number of 50s In this section, we will plot a
+scatter plot to show the relationship between the age and number of 50s
+of a T20I cricket player.</li>
+</ul>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBDcmVhdGVzIHRoZSBzY2F0dGVyIHBsb3QuXG5zY2F0dGVyX2FnZV92c181MHMgPC0gXG4gIGNyaWNrZXRfZGF0YV91cHRvXzM1ICU+JVxuICBnZ3Bsb3QoYWVzKHggPSBBZ2UsIHkgPSBCQVRUSU5HX1QyMElzXzUwKSkgK1xuICBnZW9tX3BvaW50KGNvbG9yID0gJ3B1cnBsZScpICtcbiAgZ2VvbV9zbW9vdGgobWV0aG9kID0gXCJsbVwiLCBmb3JtdWxhID0geSB+IHgsIGNvbCA9IFwicmVkXCIpICtcbiAgbGFicyh0aXRsZSA9IFwiQWdlIHZzIE51bWJlciBvZiA1MHNcIixcbiAgICAgICB4ID0gXCJBZ2VcIixcbiAgICAgICB5ID0gXCJUb3RhbCA1MHNcIilcblxuIyBEaXNwbGF5cyB0aGUgcGxvdC5cbnNjYXR0ZXJfYWdlX3ZzXzUwc1xuXG5cbmBgYCJ9 -->
+<pre class="r"><code># Creates the scatter plot.
+scatter_age_vs_50s &lt;- 
+  cricket_data_upto_35 %&gt;%
+  ggplot(aes(x = Age, y = BATTING_T20Is_50)) +
+  geom_point(color = &#39;purple&#39;) +
+  geom_smooth(method = &quot;lm&quot;, formula = y ~ x, col = &quot;red&quot;) +
+  labs(title = &quot;Age vs Number of 50s&quot;,
+       x = &quot;Age&quot;,
+       y = &quot;Total 50s&quot;)
+
+# Displays the plot.
+scatter_age_vs_50s
+</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<ul>
+<li>Scatter plot: Age vs Number of 100s In this section, we will plot a
+scatter plot to show the relationship between the age and number of 100s
+of a T20I cricket player.</li>
+</ul>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBDcmVhdGVzIHRoZSBzY2F0dGVyIHBsb3QuXG5zY2F0dGVyX2FnZV92c18xMDBzIDwtIFxuICBjcmlja2V0X2RhdGFfdXB0b18zNSAlPiVcbiAgZ2dwbG90KGFlcyh4ID0gQWdlLCB5ID0gQkFUVElOR19UMjBJc18xMDApKSArXG4gIGdlb21fcG9pbnQoY29sb3IgPSAncHVycGxlJykgK1xuICBnZW9tX3Ntb290aChtZXRob2QgPSBcImxtXCIsIGZvcm11bGEgPSB5IH4geCwgY29sID0gXCJyZWRcIikgK1xuICBsYWJzKHRpdGxlID0gXCJBZ2UgdnMgTnVtYmVyIG9mIDEwMHNcIixcbiAgICAgICB4ID0gXCJBZ2VcIixcbiAgICAgICB5ID0gXCJUb3RhbCAxMDBzXCIpXG5cbiMgRGlzcGxheXMgdGhlIHBsb3QuXG5zY2F0dGVyX2FnZV92c18xMDBzXG5cblxuYGBgIn0= -->
+<pre class="r"><code># Creates the scatter plot.
+scatter_age_vs_100s &lt;- 
+  cricket_data_upto_35 %&gt;%
+  ggplot(aes(x = Age, y = BATTING_T20Is_100)) +
+  geom_point(color = &#39;purple&#39;) +
+  geom_smooth(method = &quot;lm&quot;, formula = y ~ x, col = &quot;red&quot;) +
+  labs(title = &quot;Age vs Number of 100s&quot;,
+       x = &quot;Age&quot;,
+       y = &quot;Total 100s&quot;)
+
+# Displays the plot.
+scatter_age_vs_100s
+</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+</div>
+<div id="combined-visualization" class="section level2">
+<h2>Combined Visualization:</h2>
+<p>In this section, we will display all the graphs (or visualizations)
+together. This combined visualization will help us in comparing various
+performance metrics against age.</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBEaXNwbGF5IGFsbCB0aGUgcGxvdHMgdG9nZXRoZXIuXG5ncmlkLmFycmFuZ2UoXG4gIHNjYXR0ZXJfYWdlX3ZzX2F2Zywgc2NhdHRlcl9hZ2VfdnNfc3IsIHNjYXR0ZXJfYWdlX3ZzX3J1bnMsXG4gIHNjYXR0ZXJfYWdlX3ZzXzUwcywgc2NhdHRlcl9hZ2VfdnNfMTAwcyxcbiAgbnJvdyA9IDNcbilcblxuZ3JpZC5hcnJhbmdlKFxuICBiYXJfYWdlX3ZzX2F3YXJkcywgYmFyX3BsYXllcl9yb2xlX3ZzX2F3YXJkcyxcbiAgbnJvdyA9IDFcbilcbmBgYCJ9 -->
+<pre class="r"><code># Display all the plots together.
+grid.arrange(
+  scatter_age_vs_avg, scatter_age_vs_sr, scatter_age_vs_runs,
+  scatter_age_vs_50s, scatter_age_vs_100s,
+  nrow = 3
+)
+
+grid.arrange(
+  bar_age_vs_awards, bar_player_role_vs_awards,
+  nrow = 1
+)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
 </div>
 <div id="conclusion" class="section level2">
-<h2>Conclusion</h2>
-<p>Answer your research question using the data sets and visualizations
-you created.</p>
+<h2>Conclusion:</h2>
+<p>In this analysis, we investigated the relationship between age and
+various performance metrics of T20I cricket player who are 35 years old
+or younger.From the visualization, it can be concluded that:</p>
+<ul>
+<li><p>Age vs Batting Average, Age vs Total Runs and Age vs Number of
+50s: The scatter plot of age versus batting average, total runs and
+number of 50s demonstrates a slight positive trend. This suggests that
+the batting averages, total runs and number of 50s of the players
+increases as they get older. However, it is important to note that the
+trend is positive and not steep, meaning that their are incremental
+improvements rather than drastic changes with age.</p></li>
+<li><p>Age vs Strike Rate: The scatter plot of age vs strike rate also
+shows a positive trend. This indicates that older players tend to have
+more strike rate. Therefore, older players may have higher strike rate
+due to their high experience in reading the bowlers and the field
+conditions, leading to more effective shots and scores.</p></li>
+<li><p>Age vs Number of 100s: The scatter plot of age vs number of 100s
+shows a trend line which appers to have a slope close to zero. This
+indicates that the number of 100s scored is relatively consistent across
+all the age groups less than or equal to 35 years. From this we can also
+interpret that as the age of the players increases, their experience and
+scores increases but their ability to convert these experience and
+scores into centuries almost stays the same.</p></li>
+<li><p>Age vs Number of Awards: The bar graph of the age vs number of
+awards indicates that cricketers between the age group of 26 to 29 years
+receive more awards than any other age groups equal to or less than 35.
+Meaning that this age range might be the peak period of many of the
+cricketers, leading to prestigious awards and recognition.</p></li>
+</ul>
+<p>-Player role vs Total Awards: The bar graph of the “Player role vs
+Total Awards” indicates that bowlers get the most number of awards and
+the bowling all-rounders (meaning all-rounders who are good at bowling)
+get the least number of awards. This graph emphasizes the significant
+impact of bowlers on T20I matches, the importance of diverse roles and
+the various contributions required for a team’s success in T20I.</p>
+<p>To summarize, we can conclude that age positively impacts certain
+performance metrics like batting averages, strike rates, total runs and
+number of 50s. These improvements and positive impact can be attributed
+to experience and developing skills which come with playing for many
+years in international cricket. However, the ability to score centuries
+in T20Is remains relatively unaffected by age, highlighting the
+difficult in achieving such milestones. Moreover, the impressive phase
+of the career of a cricketer is between 26 to 29 years. Such insights
+are invaluable for the T20I selection team of every team in
+understanding the secrets of forming a balanced and powerful team of
+T20I players</p>
 <!-- rnb-text-end -->
 </div>
 
-<div id="rmd-source-code">LS0tCnRpdGxlOiAiRmluYWwgUHJvamVjdCBCYXNpYyBPdXRsaW5lIgphdXRob3I6ICJOYW1lcyBvZiBhbGwgZ3JvdXAgbWVtYmVycyIKb3V0cHV0OiBodG1sX25vdGVib29rCi0tLQoKVGhpcyBpcyBhbiBvdXRsaW5lIGZvciB5b3VyIGZpbmFsIHByb2plY3QuIFlvdSBjYW4gZm9sbG93IHRoaXMgb3V0bGluZSwgb3IgeW91IGNhbiBtb2RpZnkgaXQgYXMgeW91IHNlZSBmaXQuIERvIHdoYXQgd29ya3MgYmVzdCBmb3IgeW91ciBwcm9qZWN0LiAKCiMjIFJlc2VhcmNoIFF1ZXN0aW9uIAoKU3RhdGUgeW91ciBnZW5lcmFsIHNwZWNpZmljIHF1ZXN0aW9uIGFuZCB3aHkgaXQgaXMgaW50ZXJlc3RpbmcuIAoKCgojIyBEYXRhIFByb2Nlc3NpbmcgCgojIyMjIERhdGEgSW50YWtlIAoKSW5jbHVkZSBSIGNvZGUgYW5kIHdyaXR0ZW4gZXhwbGFuYXRpb24gdG8gaW1wb3J0IHlvdXIgKipUV08qKiBkYXRhIHNldHMuCgojIyMjIERhdGEgV3JhbmdsaW5nIAoKSW5jbHVkZSBSIGNvZGUgYW5kIHdyaXR0ZW4gZXhwbGFuYXRpb24gZm9yIHdhbmdsaW5nIHlvdXIgZGF0YSAoeW91IGNhbiBtYWtlIG11bHRpcGxlIHdyYW5nbGVkIGRhdGEgc2V0cykuIAoKCgoKIyMgRGF0YSBWaXN1YWxpemF0aW9uCgpJbmNsdWRlIFIgY29kZSBhbmQgd3JpdHRlbiBleHBsYW5hdGlvbiBmb3IgeW91ciBkYXRhIHZpc3VhbGl6YXRpb24ocykgd2l0aCBhdCBsZWFzdCAzIHZhcmlhYmxlcy4gWW91IG11c3QgaGF2ZSAqKmF0IGxlYXN0Kiogb25lIGdyYXBoLiBZb3UgbWF5IGhhdmUgbW9yZSB0aGFuIG9uZSAoSSB3b3VsZCBlbmNvdXJhZ2UgeW91IHRvIGhhdmUgbW9yZSB0aGFuIG9uZSkuIAoKCgoKIyMgQ29uY2x1c2lvbgoKQW5zd2VyIHlvdXIgcmVzZWFyY2ggcXVlc3Rpb24gdXNpbmcgdGhlIGRhdGEgc2V0cyBhbmQgdmlzdWFsaXphdGlvbnMgeW91IGNyZWF0ZWQuIA==</div>
+<div id="rmd-source-code">LS0tDQp0aXRsZTogIkluaXRpYWwgRURBIEJhc2ljIE91dGxpbmUiDQphdXRob3I6ICJEZWVrc2hpdGggUmVkZHkgQmhvb21pcmVkZHkiDQpvdXRwdXQ6IGh0bWxfbm90ZWJvb2sNCi0tLQ0KDQoNCiMjIFJlc2VhcmNoIFF1ZXN0aW9uOiANCg0KV2hhdCBpcyB0aGUgcmVsYXRpb25zaGlwIGJldHdlZW4gdGhlIGFnZSBhbmQgdmFyaW91cyBwZXJmb3JtYW5jZSBtZXRyaWNzIChhd2FyZHMsIGJhdHRpbmcgYXZlcmFnZXMsIHN0cmlrZSByYXRlLCB0b3RhbCBydW5zLCBudW1iZXIgb2YgNTBzIGFuZCBudW1iZXIgb2YgMTAwcykgb2YgVDIwSSBjcmlja2V0IHBsYXllcnMgdW5kZXIgdGhlIGFnZSBvZiAzNT8NCg0KYGBge3J9DQojVGhlIHJlcXVpcmVkIGxpYnJhcmllcw0KbGlicmFyeShkcGx5cikNCmxpYnJhcnkoZ2dwbG90MikNCmxpYnJhcnkoZ3JpZEV4dHJhKQ0KbGlicmFyeSh0aWR5dmVyc2UpDQoNCmBgYA0KDQoNCiMjIERhdGEgSW50YWtlIGFuZCBQcm9jZXNzaW5nOg0KSW4gdGhpcyBzZWN0aW9uLCB3ZSB3aWxsIGltcG9ydCB0aGUgZGF0YXNldHMgKGRvd25sb2FkZWQgZnJvbSA8aHR0cHM6Ly9kYXRhLndvcmxkL3JhZ2hhdjMzMy9jcmlja2V0LXBsYXllcnMtZXNwbj4pLiBUaGVzZSBkYXRhIHNldHMgYXJlIGNvbnRhaW4gdGhlIGxpc3Qgb2YgYWxsIGNyaWNrZXQgcGxheWVycyBzY3JhcGVkIGZyb20gPGh0dHBzOi8vd3d3LmVzcG5jcmljaW5mby5jb20+LiBBZnRlciBpbXBvcnRpbmcgdGhlIGRhdGEgc2V0cywgd2Ugd2lsbCBpbnNwZWN0IHRoZSBkYXRhIHNldHMgYW5kIGNvbXBhcmUgdGhlbSB0byBjcmVhdGUgYSBuZXcgZmlsdGVyZWQgZGF0YSBzZXQuIFRoZSBwdXJwb3NlIG9mIHRoZXNlIGRhdGEgc2V0cyBpcyB0byBhbmFseXplIGhvdyBhZ2UgYWZmZWN0cyB0aGUgcGxheWVyIHBlcmZvcm1hbmNlIGFjcm9zcyB2YXJpb3VzIG1ldHJpY3MuIFRoaXMgYW5hbHlzaXMgYW5kIGl0cyBvdXRjb21lcyBhcmUgdmFsdWFibGUgdG8gdGVhbSBzZWxlY3RvcnMgdG8gbWFrZSBlZmZpY2llbnQgZGVjaXNpb25zIGluIG1hdHRlcnMgcmVsYXRlZCB0byBwbGF5ZXIgc2VsZWN0aW9uIGZvciB0aGUgVDIwSSB0ZWFtLg0KDQpgYGB7cn0NCiMgSW1wb3J0IHRoZSBkYXRhIHNldHMNCm9sZF9jcmlja2V0X2RhdGEgPC0gcmVhZF9jc3YoImNyaWNrZXRfZGF0YS5jc3YiLCBzaG93X2NvbF90eXBlcyA9IEZBTFNFKQ0KY3JpY2tldF9kYXRhIDwtIHJlYWRfY3N2KCJTdXBlckNsZWFuZWQuY3N2Iiwgc2hvd19jb2xfdHlwZXMgPSBGQUxTRSkNCg0KI0luc3BlY3QgdGhlIGRhdGEgc2V0cw0KZ2xpbXBzZShvbGRfY3JpY2tldF9kYXRhKQ0KVmlldyhvbGRfY3JpY2tldF9kYXRhKQ0KDQpnbGltcHNlKGNyaWNrZXRfZGF0YSkNClZpZXcoY3JpY2tldF9kYXRhKQ0KDQpgYGANCg0KQWZ0ZXIgaW5zcGVjdGluZyB0aGUgZGF0YSBzZXQgSSBjYW1lIHRvIGEgY29uc2x1c2lvbiB0aGF0IGl0IGlzIGJldHRlciB0byBtb3ZlIGZvcndhcmQgd2l0aCB0aGUgIlN1cGVyQ2xlYW5lZC5jc3YiIGZpbGUgb25seSwgYmVjYXVzZSB0aGUgImNyaWNrZXRfZGF0YS5jc3YiIGZpbGUgY29uc2lzdHMgb2YgYSBsb3Qgb2YgdW5uZWNlc3NhcnkgYW5kIG1pc3NpbmcgZGF0YS4NCg0KDQojIyBEYXRhIFdyYW5nbGluZzoNCkluIHRoaXMgc2VjdGlvbiwgd2Ugd2lsbCBjbGVhbiBhbmQgZmlsdGVyIHRoZSBkYXRhLiBUaGlzIGluY2x1ZGVzIGNvbnZlcnRpbmcgcmVxdWlyZWQgY29sdW1ucyB0byBudW1lcmljIGRhdGEgdHlwZXMgYW5kIGZpbHRlcmluZyB0aGUgZGF0YSB0byBpbmNsdWRlIG9ubHkgcGxheWVycyB3aG8gYXJlIDM1IHllYXJzIG9yIHlvdW5nZXIgKGJlY2F1c2UgdGhlIGF2ZXJhZ2UgcmV0aXJlbWVudCBhZ2Ugb2YgYSBUMjBJIGNyaWNrZXRlciBpcyBhcm91bmQgMzUgeWVhcnMpLg0KDQpgYGB7cn0NCg0KIyBTZWxlY3QgcmVsZXZhbnQgY29sdW1ucw0Kc3VwZXJfY2xlYW5lZF9kYXRhIDwtIGNyaWNrZXRfZGF0YSAlPiUgc2VsZWN0KE5BTUUsIEFXQVJEUywgQkFUVElOR19UMjBJc18xMDAsIEJBVFRJTkdfVDIwSXNfNTAsIEJBVFRJTkdfVDIwSXNfQXZlLCBCQVRUSU5HX1QyMElzX1J1bnMsIEJBVFRJTkdfVDIwc19BdmUsIEJBVFRJTkdfVDIwSXNfU1IsIEFnZSkNCmNyaWNrZXRfZGF0YV9yb2xlIDwtIG9sZF9jcmlja2V0X2RhdGEgJT4lIHNlbGVjdChOQU1FLCBgUGxheWluZyByb2xlYCkNCg0KIyBNZXJnZSB0aGUgZGF0YXNldHMNCm1lcmdlZF9kYXRhIDwtIA0KICBzdXBlcl9jbGVhbmVkX2RhdGEgJT4lDQogIGlubmVyX2pvaW4oY3JpY2tldF9kYXRhX3JvbGUsIGJ5ID0gIk5BTUUiKQ0KDQojIENsZWFuaW5nIHRoZSBkYXRhIHNldA0KY3JpY2tldF9kYXRhX2NsZWFuIDwtIA0KICBtZXJnZWRfZGF0YSAlPiUNCiAgc2VsZWN0KGMoTkFNRSwgQWdlLCBBV0FSRFMsIEJBVFRJTkdfVDIwSXNfMTAwLCBCQVRUSU5HX1QyMElzXzUwLCBCQVRUSU5HX1QyMElzX0F2ZSwgQkFUVElOR19UMjBJc19SdW5zLCBCQVRUSU5HX1QyMHNfQXZlLCBCQVRUSU5HX1QyMElzX1NSLCBgUGxheWluZyByb2xlYCkpICU+JQ0KICBmaWx0ZXIoIWlzLm5hKEJBVFRJTkdfVDIwSXNfQXZlKSAmICFpcy5uYShBZ2UpICYgIWlzLm5hKEJBVFRJTkdfVDIwSXNfU1IpICYgIWlzLm5hKEJBVFRJTkdfVDIwSXNfUnVucykgJiAhaXMubmEoQkFUVElOR19UMjBJc18xMDApICYgIWlzLm5hKEJBVFRJTkdfVDIwSXNfNTApKSAlPiUNCiAgbXV0YXRlKA0KICAgIEFnZSA9IGFzLm51bWVyaWMoQWdlKSwNCiAgICBUb3RhbF9SdW5zID0gYXMubnVtZXJpYyhCQVRUSU5HX1QyMElzX1J1bnMpLA0KICAgIEJBVFRJTkdfVDIwSXNfQXZlID0gYXMubnVtZXJpYyhCQVRUSU5HX1QyMElzX0F2ZSksDQogICAgQkFUVElOR19UMjBJc19TUiA9IGFzLm51bWVyaWMoQkFUVElOR19UMjBJc19TUiksDQogICAgQkFUVElOR19UMjBJc18xMDAgPSBhcy5udW1lcmljKEJBVFRJTkdfVDIwSXNfMTAwKSwNCiAgICBCQVRUSU5HX1QyMElzXzUwID0gYXMubnVtZXJpYyhCQVRUSU5HX1QyMElzXzUwKQ0KICApDQoNCiMgRmlsdGVyIHRoZSBuZXcgZGF0YSB0byBpbmNsdWRlIG9ubHkgY3JpY2tldGVycyB3aG8gYXJlIDM1IHllYXJzIG9sZCBvciB5b3VuZ2VyDQpjcmlja2V0X2RhdGFfdXB0b18zNSA8LSBjcmlja2V0X2RhdGFfY2xlYW4gJT4lDQogIGZpbHRlcihBZ2UgPD0gMzUpDQoNCmBgYA0KDQoNCg0KIyMgRGF0YSBWaXN1YWxpemF0aW9uOg0KSW4gdGhpcyBzZWN0aW9uLCB3ZSB3aWxsIGNyZWF0ZSB2YXJpb3VzIHZpc3VhbGl6YXRpb25zIHRvIGV4cGxvcmUgdGhlIHJlbGF0aW9uc2hpcCBiZXR3ZWVuIGFnZSBhbmQgdmFyaW91cyBwZXJmb3JtYW5jZSBtZXRyaWNzIGluIFQyMEkgY3JpY2tldCBwbGF5ZXJzIHVuZGVyIHRoZSBhZ2Ugb2YgMzUuIEFsbCB0aGUgdmFyaW91cyBwZXJmb3JtYWNlIG1ldHJpY3MgYXJlIHRoZSB2YXJpYWJsZXM6DQotIEFnZTogQSBudW1lcmljIHZhcmlhYmxlIHdoaWNoIHJlcHJlc2VudHMgdGhlIGFnZSBvZiB0aGUgcGxheWVycy4NCi0gQVdBUkRTOiBBIGxpc3Qgd2hpY2ggY29uc2lzdHMgb2YgYWxsIHRoZSBhd2FyZHMgcmVjZWl2ZWQgYnkgZWFjaCBwbGF5ZXIgaW4gVDIwSSBtYXRjaGVzLiANCi0gQkFUVElOR19UMjBJc19BdmU6IEEgbnVtZXJpYyB2YXJpYWJsZSB3aGljaCByZXByZXNlbnRzIHRoZSBiYXR0aW5nIGF2ZXJhZ2Ugb2YgZWFjaCBwbGF5ZXIgaW4gVDIwSSBtYXRjaGVzLg0KLSBCQVRUSU5HX1QyMElzX1NSOiBBIG51bWVyaWMgdmFyaWFibGUgd2hpY2ggcmVwcmVzZW50cyB0aGUgc3RyaWtlIHJhdGUgb2YgZWFjaCBwbGF5ZXIgaW4gVDIwSSBtYXRjaGVzLg0KLSBUb3RhbF9SdW5zOiBBIG51bWVyaWMgdmFyaWFibGUgd2hpY2ggcmVwcmVzZW50cyB0aGUgdG90YWwgbnVtYmVyIG9mIHJ1bnMgb2YgZWFjaCBwbGF5ZXIgaW4gVDIwSSBtYXRjaGVzLg0KLSBCQVRUSU5HX1QyMElzXzUwOiBBIG51bWVyaWMgdmFyaWFibGUgd2hpY2ggcmVwcmVzZW50cyB0aGUgdG90YWwgbnVtYmVyIG9mIGhhbGYtY2VudHVyaWVzIG9mIGVhY2ggcGxheWVyIGluIFQyMEkgbWF0Y2hlcy4NCi0gQkFUVElOR19UMjBJc18xMDA6IEEgbnVtZXJpYyB2YXJpYWJsZSB3aGljaCByZXByZXNlbnRzIHRoZSB0b3RhbCBudW1iZXIgb2YgY2VudHVyaWVzIG9mIGVhY2ggcGxheWVyIGluIFQyMEkgbWF0Y2hlcy4NCi0gUGxheWluZyByb2xlOiBBIGNhdGVnb3JpY2FsIHZhcmlhYmxlIHdoaWNoIHJlcHJlc2VudHMgdGhlIHByaW1hcnkgcm9sZSBvZiB0aGUgcGxheWVyIGluIHRoZSB0ZWFtLg0KDQoNCg0KLSBCYXIgZ3JhcGg6IFBsYXllciByb2xlIHZzIFRvdGFsIE51bWJlciBvZiBBd2FyZHMNCkluIHRoaXMgc2VjdGlvbiwgd2Ugd2lsbCBwbG90IGEgYmFyIGdyYXBoIHRvIHNob3cgdGhlIHJlbGF0aW9uc2hpcCBiZXR3ZWVuIHRoZSBwbGF5ZXIgcm9sZSBhbmQgdG90YWwgbnVtYmVyIG9mIGF3YXJkcyBvZiBhIFQyMEkgY3JpY2tldCBwbGF5ZXIuDQoNCmBgYHtyfQ0KI0ZpbHRlciB0aGUgZGF0YSBzZXQgZm9yIHRoZSBhd2FyZHMgYW5kIHRoZSBwbGF5ZXIgcm9sZS4NCmF3YXJkc19ieV9wbGF5ZXJfcm9sZSA8LSBjcmlja2V0X2RhdGFfdXB0b18zNSAlPiUNCiAgZmlsdGVyKCFpcy5uYShOQU1FKSAmICFpcy5uYShgUGxheWluZyByb2xlYCkgJiAhaXMubmEoQVdBUkRTKSkgJT4lDQogIGZpbHRlcighYFBsYXlpbmcgcm9sZWAgJWluJSBjKCdCYXRzbWFuLCBCYXRzbWFuJywgJ1dpY2tldGtlZXBlciwgV2lja2V0a2VlcGVyJykpICU+JQ0KICBncm91cF9ieShgUGxheWluZyByb2xlYCkgJT4lDQogIHN1bW1hcmlzZShUb3RhbF9Bd2FyZHMgPSBuKCkpICU+JQ0KICBhcnJhbmdlKGRlc2MoVG90YWxfQXdhcmRzKSkNCg0KIyBDcmVhdGVzIHRoZSBiYXIgY2hhcnQuDQpiYXJfcGxheWVyX3JvbGVfdnNfYXdhcmRzIDwtIA0KICBhd2FyZHNfYnlfcGxheWVyX3JvbGUgJT4lDQogIGdncGxvdChhZXMoeCA9IHJlb3JkZXIoYFBsYXlpbmcgcm9sZWAsIFRvdGFsX0F3YXJkcyksIHkgPSBUb3RhbF9Bd2FyZHMpKSArDQogIGdlb21fYmFyKHN0YXQgPSAiaWRlbnRpdHkiLCBmaWxsID0gJ3NreWJsdWUnKSArDQogIGxhYnModGl0bGUgPSAiUGxheWVyIFJvbGUgdnMgTnVtYmVyIG9mIEF3YXJkcyIsDQogICAgICAgeCA9ICJQbGF5ZXIgUm9sZSIsDQogICAgICAgeSA9ICJUb3RhbCBBd2FyZHMiKSArDQogIHRoZW1lKGF4aXMudGV4dC54ID0gZWxlbWVudF90ZXh0KGFuZ2xlID0gNDUsIGhqdXN0ID0gMSkpDQoNCiMgRGlzcGxheXMgdGhlIHBsb3QuDQpiYXJfcGxheWVyX3JvbGVfdnNfYXdhcmRzDQoNCmBgYA0KDQoNCg0KLSBCYXIgZ3JhcGg6IEFnZSB2cyBUb3RhbCBOdW1iZXIgb2YgQXdhcmRzDQpJbiB0aGlzIHNlY3Rpb24sIHdlIHdpbGwgcGxvdCBhIGJhciBncmFwaCB0byBzaG93IHRoZSByZWxhdGlvbnNoaXAgYmV0d2VlbiB0aGUgYWdlIGFuZCB0b3RhbCBudW1iZXIgb2YgYXdhcmRzIG9mIGEgVDIwSSBjcmlja2V0IHBsYXllci4NCg0KYGBge3J9DQoNCiNGaWx0ZXIgdGhlIGRhdGEgc2V0IGZvciB0aGUgYXdhcmRzIGFuZCBhZ2UuDQphd2FyZHNfYnlfYWdlX2dyb3VwX3VwdG9fMzUgPC0gDQogIGNyaWNrZXRfZGF0YV91cHRvXzM1ICU+JQ0KICBmaWx0ZXIoIWlzLm5hKE5BTUUpICYgIWlzLm5hKEFnZSkgJiAhaXMubmEoQVdBUkRTKSkgJT4lDQogIGdyb3VwX2J5KEFnZV9Hcm91cCA9IGN1dChBZ2UsIGJyZWFrcyA9IHNlcSgyMCwgMzUsIGJ5ID0gMykpKSAlPiUNCiAgc3VtbWFyaXNlKFRvdGFsX0F3YXJkcyA9IG4oKSkNCg0KIyBDcmVhdGVzIHRoZSBiYXIgY2hhcnQuDQpiYXJfYWdlX3ZzX2F3YXJkcyA8LSANCiAgYXdhcmRzX2J5X2FnZV9ncm91cF91cHRvXzM1ICU+JQ0KICBnZ3Bsb3QoYWVzKHggPSBBZ2VfR3JvdXAsIHkgPSBUb3RhbF9Bd2FyZHMpKSArDQogIGdlb21fYmFyKHN0YXQgPSAiaWRlbnRpdHkiLCBmaWxsID0gJ3NreWJsdWUnKSArDQogIGxhYnModGl0bGUgPSAiQWdlIEdyb3VwIHZzIE51bWJlciBvZiBBd2FyZHMiLA0KICAgICAgIHggPSAiQWdlIEdyb3VwIiwNCiAgICAgICB5ID0gIlRvdGFsIEF3YXJkcyIpDQoNCiMgRGlzcGxheXMgdGhlIHBsb3QuDQpiYXJfYWdlX3ZzX2F3YXJkcw0KDQpgYGANCg0KDQoNCi0gU2NhdHRlciBwbG90OiBBZ2UgdnMgQmF0dGluZyBBdmVyYWdlDQpJbiB0aGlzIHNlY3Rpb24sIHdlIHdpbGwgcGxvdCBhIHNjYXR0ZXIgcGxvdCB0byBzaG93IHRoZSByZWxhdGlvbnNoaXAgYmV0d2VlbiB0aGUgYWdlIGFuZCBiYXR0aW5nIGF2ZXJhZ2Ugb2YgYSBUMjBJIGNyaWNrZXQgcGxheWVyLg0KDQpgYGB7cn0NCiMgQ3JlYXRlcyB0aGUgc2NhdHRlciBwbG90Lg0Kc2NhdHRlcl9hZ2VfdnNfYXZnIDwtIA0KICBjcmlja2V0X2RhdGFfdXB0b18zNSAlPiUNCiAgZ2dwbG90KGFlcyh4ID0gQWdlLCB5ID0gQkFUVElOR19UMjBJc19BdmUpKSArDQogIGdlb21fcG9pbnQoY29sb3IgPSAncHVycGxlJykgKw0KICBnZW9tX3Ntb290aChtZXRob2QgPSAibG0iLCBmb3JtdWxhID0geSB+IHgsIGNvbCA9ICJyZWQiKSArDQogIGxhYnModGl0bGUgPSAiQWdlIHZzIEJhdHRpbmcgQXZlcmFnZSIsDQogICAgICAgeCA9ICJBZ2UiLA0KICAgICAgIHkgPSAiQmF0dGluZyBBdmVyYWdlIikNCg0KIyBEaXNwbGF5cyB0aGUgcGxvdC4NCnNjYXR0ZXJfYWdlX3ZzX2F2Zw0KDQoNCmBgYA0KDQoNCg0KLSBTY2F0dGVyIHBsb3Q6IEFnZSB2cyBTdHJpa2UgUmF0ZQ0KSW4gdGhpcyBzZWN0aW9uLCB3ZSB3aWxsIHBsb3QgYSBzY2F0dGVyIHBsb3QgdG8gc2hvdyB0aGUgcmVsYXRpb25zaGlwIGJldHdlZW4gdGhlIGFnZSBhbmQgc3RyaWtlIHJhdGUgb2YgYSBUMjBJIGNyaWNrZXQgcGxheWVyLg0KDQpgYGB7cn0NCiMgQ3JlYXRlcyB0aGUgc2NhdHRlciBwbG90Lg0Kc2NhdHRlcl9hZ2VfdnNfc3IgPC0gDQogIGNyaWNrZXRfZGF0YV91cHRvXzM1ICU+JQ0KICBnZ3Bsb3QoYWVzKHggPSBBZ2UsIHkgPSBCQVRUSU5HX1QyMElzX1NSKSkgKw0KICBnZW9tX3BvaW50KGNvbG9yID0gJ3B1cnBsZScpICsNCiAgZ2VvbV9zbW9vdGgobWV0aG9kID0gImxtIiwgZm9ybXVsYSA9IHkgfiB4LCBjb2wgPSAicmVkIikgKw0KICBsYWJzKHRpdGxlID0gIkFnZSB2cyBTdHJpa2UgUmF0ZSIsDQogICAgICAgeCA9ICJBZ2UiLA0KICAgICAgIHkgPSAiU3RyaWtlIFJhdGUiKQ0KDQojIERpc3BsYXlzIHRoZSBwbG90Lg0Kc2NhdHRlcl9hZ2VfdnNfc3INCg0KDQpgYGANCg0KDQoNCi0gU2NhdHRlciBwbG90OiBBZ2UgdnMgVG90YWwgUnVucw0KSW4gdGhpcyBzZWN0aW9uLCB3ZSB3aWxsIHBsb3QgYSBzY2F0dGVyIHBsb3QgdG8gc2hvdyB0aGUgcmVsYXRpb25zaGlwIGJldHdlZW4gdGhlIGFnZSBhbmQgdG90YWwgcnVucyBvZiBhIFQyMEkgY3JpY2tldCBwbGF5ZXIuDQoNCmBgYHtyfQ0KIyBDcmVhdGVzIHRoZSBzY2F0dGVyIHBsb3QuDQpzY2F0dGVyX2FnZV92c19ydW5zIDwtIA0KICBjcmlja2V0X2RhdGFfdXB0b18zNSAlPiUNCiAgZ2dwbG90KGFlcyh4ID0gQWdlLCB5ID0gVG90YWxfUnVucykpICsNCiAgZ2VvbV9wb2ludChjb2xvciA9ICdwdXJwbGUnKSArDQogIGdlb21fc21vb3RoKG1ldGhvZCA9ICJsbSIsIGZvcm11bGEgPSB5IH4geCwgY29sID0gInJlZCIpICsNCiAgbGFicyh0aXRsZSA9ICJBZ2UgdnMgVG90YWwgUnVucyIsDQogICAgICAgeCA9ICJBZ2UiLA0KICAgICAgIHkgPSAiVG90YWwgUnVucyIpDQoNCiMgRGlzcGxheXMgdGhlIHBsb3QuDQpzY2F0dGVyX2FnZV92c19ydW5zDQoNCg0KYGBgDQoNCg0KDQotIFNjYXR0ZXIgcGxvdDogQWdlIHZzIE51bWJlciBvZiA1MHMNCkluIHRoaXMgc2VjdGlvbiwgd2Ugd2lsbCBwbG90IGEgc2NhdHRlciBwbG90IHRvIHNob3cgdGhlIHJlbGF0aW9uc2hpcCBiZXR3ZWVuIHRoZSBhZ2UgYW5kIG51bWJlciBvZiA1MHMgb2YgYSBUMjBJIGNyaWNrZXQgcGxheWVyLg0KDQpgYGB7cn0NCiMgQ3JlYXRlcyB0aGUgc2NhdHRlciBwbG90Lg0Kc2NhdHRlcl9hZ2VfdnNfNTBzIDwtIA0KICBjcmlja2V0X2RhdGFfdXB0b18zNSAlPiUNCiAgZ2dwbG90KGFlcyh4ID0gQWdlLCB5ID0gQkFUVElOR19UMjBJc181MCkpICsNCiAgZ2VvbV9wb2ludChjb2xvciA9ICdwdXJwbGUnKSArDQogIGdlb21fc21vb3RoKG1ldGhvZCA9ICJsbSIsIGZvcm11bGEgPSB5IH4geCwgY29sID0gInJlZCIpICsNCiAgbGFicyh0aXRsZSA9ICJBZ2UgdnMgTnVtYmVyIG9mIDUwcyIsDQogICAgICAgeCA9ICJBZ2UiLA0KICAgICAgIHkgPSAiVG90YWwgNTBzIikNCg0KIyBEaXNwbGF5cyB0aGUgcGxvdC4NCnNjYXR0ZXJfYWdlX3ZzXzUwcw0KDQoNCmBgYA0KDQoNCg0KLSBTY2F0dGVyIHBsb3Q6IEFnZSB2cyBOdW1iZXIgb2YgMTAwcw0KSW4gdGhpcyBzZWN0aW9uLCB3ZSB3aWxsIHBsb3QgYSBzY2F0dGVyIHBsb3QgdG8gc2hvdyB0aGUgcmVsYXRpb25zaGlwIGJldHdlZW4gdGhlIGFnZSBhbmQgbnVtYmVyIG9mIDEwMHMgb2YgYSBUMjBJIGNyaWNrZXQgcGxheWVyLg0KDQpgYGB7cn0NCiMgQ3JlYXRlcyB0aGUgc2NhdHRlciBwbG90Lg0Kc2NhdHRlcl9hZ2VfdnNfMTAwcyA8LSANCiAgY3JpY2tldF9kYXRhX3VwdG9fMzUgJT4lDQogIGdncGxvdChhZXMoeCA9IEFnZSwgeSA9IEJBVFRJTkdfVDIwSXNfMTAwKSkgKw0KICBnZW9tX3BvaW50KGNvbG9yID0gJ3B1cnBsZScpICsNCiAgZ2VvbV9zbW9vdGgobWV0aG9kID0gImxtIiwgZm9ybXVsYSA9IHkgfiB4LCBjb2wgPSAicmVkIikgKw0KICBsYWJzKHRpdGxlID0gIkFnZSB2cyBOdW1iZXIgb2YgMTAwcyIsDQogICAgICAgeCA9ICJBZ2UiLA0KICAgICAgIHkgPSAiVG90YWwgMTAwcyIpDQoNCiMgRGlzcGxheXMgdGhlIHBsb3QuDQpzY2F0dGVyX2FnZV92c18xMDBzDQoNCg0KYGBgDQoNCg0KDQojIyBDb21iaW5lZCBWaXN1YWxpemF0aW9uOg0KSW4gdGhpcyBzZWN0aW9uLCB3ZSB3aWxsIGRpc3BsYXkgYWxsIHRoZSBncmFwaHMgKG9yIHZpc3VhbGl6YXRpb25zKSB0b2dldGhlci4gVGhpcyBjb21iaW5lZCB2aXN1YWxpemF0aW9uIHdpbGwgaGVscCB1cyBpbiBjb21wYXJpbmcgdmFyaW91cyBwZXJmb3JtYW5jZSBtZXRyaWNzIGFnYWluc3QgYWdlLg0KDQpgYGB7cn0NCiMgRGlzcGxheSBhbGwgdGhlIHBsb3RzIHRvZ2V0aGVyLg0KZ3JpZC5hcnJhbmdlKA0KICBzY2F0dGVyX2FnZV92c19hdmcsIHNjYXR0ZXJfYWdlX3ZzX3NyLCBzY2F0dGVyX2FnZV92c19ydW5zLA0KICBzY2F0dGVyX2FnZV92c181MHMsIHNjYXR0ZXJfYWdlX3ZzXzEwMHMsDQogIG5yb3cgPSAzDQopDQoNCmdyaWQuYXJyYW5nZSgNCiAgYmFyX2FnZV92c19hd2FyZHMsIGJhcl9wbGF5ZXJfcm9sZV92c19hd2FyZHMsDQogIG5yb3cgPSAxDQopDQpgYGANCg0KDQojIyBDb25jbHVzaW9uOg0KSW4gdGhpcyBhbmFseXNpcywgd2UgaW52ZXN0aWdhdGVkIHRoZSByZWxhdGlvbnNoaXAgYmV0d2VlbiBhZ2UgYW5kIHZhcmlvdXMgcGVyZm9ybWFuY2UgbWV0cmljcyBvZiBUMjBJIGNyaWNrZXQgcGxheWVyIHdobyBhcmUgMzUgeWVhcnMgb2xkIG9yIHlvdW5nZXIuRnJvbSB0aGUgdmlzdWFsaXphdGlvbiwgaXQgY2FuIGJlIGNvbmNsdWRlZCB0aGF0Og0KDQotIEFnZSB2cyBCYXR0aW5nIEF2ZXJhZ2UsIEFnZSB2cyBUb3RhbCBSdW5zIGFuZCBBZ2UgdnMgTnVtYmVyIG9mIDUwczogDQpUaGUgc2NhdHRlciBwbG90IG9mIGFnZSB2ZXJzdXMgYmF0dGluZyBhdmVyYWdlLCB0b3RhbCBydW5zIGFuZCBudW1iZXIgb2YgNTBzIGRlbW9uc3RyYXRlcyBhIHNsaWdodCBwb3NpdGl2ZSB0cmVuZC4gVGhpcyBzdWdnZXN0cyB0aGF0IHRoZSBiYXR0aW5nIGF2ZXJhZ2VzLCB0b3RhbCBydW5zIGFuZCBudW1iZXIgb2YgNTBzIG9mIHRoZSBwbGF5ZXJzIGluY3JlYXNlcyBhcyB0aGV5IGdldCBvbGRlci4gSG93ZXZlciwgaXQgaXMgaW1wb3J0YW50IHRvIG5vdGUgdGhhdCB0aGUgdHJlbmQgaXMgcG9zaXRpdmUgYW5kIG5vdCBzdGVlcCwgbWVhbmluZyB0aGF0IHRoZWlyIGFyZSBpbmNyZW1lbnRhbCBpbXByb3ZlbWVudHMgcmF0aGVyIHRoYW4gZHJhc3RpYyBjaGFuZ2VzIHdpdGggYWdlLg0KDQotIEFnZSB2cyBTdHJpa2UgUmF0ZToNClRoZSBzY2F0dGVyIHBsb3Qgb2YgYWdlIHZzIHN0cmlrZSByYXRlIGFsc28gc2hvd3MgYSBwb3NpdGl2ZSB0cmVuZC4gVGhpcyBpbmRpY2F0ZXMgdGhhdCBvbGRlciBwbGF5ZXJzIHRlbmQgdG8gaGF2ZSBtb3JlIHN0cmlrZSByYXRlLiBUaGVyZWZvcmUsIG9sZGVyIHBsYXllcnMgbWF5IGhhdmUgaGlnaGVyIHN0cmlrZSByYXRlIGR1ZSB0byB0aGVpciBoaWdoIGV4cGVyaWVuY2UgaW4gcmVhZGluZyB0aGUgYm93bGVycyBhbmQgdGhlIGZpZWxkIGNvbmRpdGlvbnMsIGxlYWRpbmcgdG8gbW9yZSBlZmZlY3RpdmUgc2hvdHMgYW5kIHNjb3Jlcy4NCg0KDQotIEFnZSB2cyBOdW1iZXIgb2YgMTAwczogDQpUaGUgc2NhdHRlciBwbG90IG9mIGFnZSB2cyBudW1iZXIgb2YgMTAwcyBzaG93cyBhIHRyZW5kIGxpbmUgd2hpY2ggYXBwZXJzIHRvIGhhdmUgYSBzbG9wZSBjbG9zZSB0byB6ZXJvLiBUaGlzIGluZGljYXRlcyB0aGF0IHRoZSBudW1iZXIgb2YgMTAwcyBzY29yZWQgaXMgcmVsYXRpdmVseSBjb25zaXN0ZW50IGFjcm9zcyBhbGwgdGhlIGFnZSBncm91cHMgbGVzcyB0aGFuIG9yIGVxdWFsIHRvIDM1IHllYXJzLiBGcm9tIHRoaXMgd2UgY2FuIGFsc28gaW50ZXJwcmV0IHRoYXQgYXMgdGhlIGFnZSBvZiB0aGUgcGxheWVycyBpbmNyZWFzZXMsIHRoZWlyIGV4cGVyaWVuY2UgYW5kIHNjb3JlcyBpbmNyZWFzZXMgYnV0IHRoZWlyIGFiaWxpdHkgdG8gY29udmVydCB0aGVzZSBleHBlcmllbmNlIGFuZCBzY29yZXMgaW50byBjZW50dXJpZXMgYWxtb3N0IHN0YXlzIHRoZSBzYW1lLg0KDQotIEFnZSB2cyBOdW1iZXIgb2YgQXdhcmRzOiANClRoZSBiYXIgZ3JhcGggb2YgdGhlIGFnZSB2cyBudW1iZXIgb2YgYXdhcmRzIGluZGljYXRlcyB0aGF0IGNyaWNrZXRlcnMgYmV0d2VlbiB0aGUgYWdlIGdyb3VwIG9mIDI2IHRvIDI5IHllYXJzIHJlY2VpdmUgbW9yZSBhd2FyZHMgdGhhbiBhbnkgb3RoZXIgYWdlIGdyb3VwcyBlcXVhbCB0byBvciBsZXNzIHRoYW4gMzUuIE1lYW5pbmcgdGhhdCB0aGlzIGFnZSByYW5nZSBtaWdodCBiZSB0aGUgcGVhayBwZXJpb2Qgb2YgbWFueSBvZiB0aGUgY3JpY2tldGVycywgbGVhZGluZyB0byBwcmVzdGlnaW91cyBhd2FyZHMgYW5kIHJlY29nbml0aW9uLg0KDQotUGxheWVyIHJvbGUgdnMgVG90YWwgQXdhcmRzOg0KVGhlIGJhciBncmFwaCBvZiB0aGUgIlBsYXllciByb2xlIHZzIFRvdGFsIEF3YXJkcyIgaW5kaWNhdGVzIHRoYXQgYm93bGVycyBnZXQgdGhlIG1vc3QgbnVtYmVyIG9mIGF3YXJkcyBhbmQgdGhlIGJvd2xpbmcgYWxsLXJvdW5kZXJzIChtZWFuaW5nIGFsbC1yb3VuZGVycyB3aG8gYXJlIGdvb2QgYXQgYm93bGluZykgZ2V0IHRoZSBsZWFzdCBudW1iZXIgb2YgYXdhcmRzLiBUaGlzIGdyYXBoIGVtcGhhc2l6ZXMgdGhlIHNpZ25pZmljYW50IGltcGFjdCBvZiBib3dsZXJzIG9uIFQyMEkgbWF0Y2hlcywgdGhlIGltcG9ydGFuY2Ugb2YgZGl2ZXJzZSByb2xlcyBhbmQgdGhlIHZhcmlvdXMgY29udHJpYnV0aW9ucyByZXF1aXJlZCBmb3IgYSB0ZWFtJ3Mgc3VjY2VzcyBpbiBUMjBJLiANCg0KDQpUbyBzdW1tYXJpemUsIHdlIGNhbiBjb25jbHVkZSB0aGF0IGFnZSBwb3NpdGl2ZWx5IGltcGFjdHMgY2VydGFpbiBwZXJmb3JtYW5jZSBtZXRyaWNzIGxpa2UgYmF0dGluZyBhdmVyYWdlcywgc3RyaWtlIHJhdGVzLCB0b3RhbCBydW5zIGFuZCBudW1iZXIgb2YgNTBzLiBUaGVzZSBpbXByb3ZlbWVudHMgYW5kIHBvc2l0aXZlIGltcGFjdCBjYW4gYmUgYXR0cmlidXRlZCB0byBleHBlcmllbmNlIGFuZCBkZXZlbG9waW5nIHNraWxscyB3aGljaCBjb21lIHdpdGggcGxheWluZyBmb3IgbWFueSB5ZWFycyBpbiBpbnRlcm5hdGlvbmFsIGNyaWNrZXQuIEhvd2V2ZXIsIHRoZSBhYmlsaXR5IHRvIHNjb3JlIGNlbnR1cmllcyBpbiBUMjBJcyByZW1haW5zIHJlbGF0aXZlbHkgdW5hZmZlY3RlZCBieSBhZ2UsIGhpZ2hsaWdodGluZyB0aGUgZGlmZmljdWx0IGluIGFjaGlldmluZyBzdWNoIG1pbGVzdG9uZXMuIE1vcmVvdmVyLCB0aGUgaW1wcmVzc2l2ZSBwaGFzZSBvZiB0aGUgY2FyZWVyIG9mIGEgY3JpY2tldGVyIGlzIGJldHdlZW4gMjYgdG8gMjkgeWVhcnMuIFN1Y2ggaW5zaWdodHMgYXJlIGludmFsdWFibGUgZm9yIHRoZSBUMjBJIHNlbGVjdGlvbiB0ZWFtIG9mIGV2ZXJ5IHRlYW0gaW4gdW5kZXJzdGFuZGluZyB0aGUgc2VjcmV0cyBvZiBmb3JtaW5nIGEgYmFsYW5jZWQgYW5kIHBvd2VyZnVsIHRlYW0gb2YgVDIwSSBwbGF5ZXJzDQo=</div>
 
 
 
