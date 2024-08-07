@@ -20,7 +20,9 @@ library(tidyverse)
 
 
 ## Data Intake and Processing:
-In this section, we will import the datasets (downloaded from <https://data.world/raghav333/cricket-players-espn>). These data sets are contain the list of all cricket players scraped from <https://www.espncricinfo.com>. After importing the data sets, we will inspect the data sets and compare them to create a new filtered data set. The purpose of these data sets is to analyze how age affects the player performance across various metrics. This analysis and its outcomes are valuable to team selectors to make efficient decisions in matters related to player selection for the T20I team.
+In this section, we will import the data sets (downloaded from <https://data.world/raghav333/cricket-players-espn>). These data sets contain comprehensive information on cricket players information scraped from <https://www.espncricinfo.com/cricketers>, a well-known and reputable source for cricket match statistics. These statistics and data sets are accurate and up-to-date. However, the data set we will be using is somewhat old, so it does not contain statistics from recent years. 
+
+After importing the data sets, we will inspect the data sets and compare them to create a new filtered data set. The purpose of these data sets is to analyze how age affects the player performance across various metrics. This analysis and its outcomes are valuable to team selectors to make efficient decisions in matters related to player selection for the T20I team.
 
 ```{r}
 # Import the data sets
@@ -34,13 +36,39 @@ View(old_cricket_data)
 glimpse(cricket_data)
 View(cricket_data)
 
+# Number of unique countries in the "cricket_data"
+num_countries <- cricket_data %>%
+  filter(!is.na(COUNTRY)) %>%
+  summarize(num_countries = n_distinct(COUNTRY)) %>%
+  pull(num_countries)
+
+if (num_countries_old == num_countries) {
+  # Prints the number of countries in both data sets
+  cat("Number of countries in both the data sets:", num_countries_old, "\n")
+} else{
+  # Prints the number of countries in "old_cricket_data"
+  cat("Number of countries in the old dataset:", num_countries_old, "\n")
+
+  # Prints the number of countries in "cricket_data"
+  cat("Number of countries in the new dataset:", num_countries, "\n")
+}
+
+
 ```
 
-After inspecting the data set I came to a conslusion that it is better to move forward with the "SuperCleaned.csv" file only, because the "cricket_data.csv" file consists of a lot of unnecessary and missing data.
+## Data Points Examination:
+The data sets were scraped and uploaded on <https://data.world/raghav333/cricket-players-espn>, 5 years ago, and also provide very useful information on 90308 male cricket players from 105 countries. Both the data sets contain detailed information about each cricketer, ranging from their age to specific performance metric (like their strike rate, batting average, and many more).
+
+- Number of data points: The "cricket_data.csv" file has data related to 90308 players and 181 variables. Whereas, the "SuperCleaned.csv" file has data related to 90308 players and 177 columns. The data sets are . 
+
+- Representation of countries: Both the data sets represent cricketers from 105 countries, ensuring a diverse sample of international players. This wide and diverse representation allows for a comprehensive analysis of cricket performance across different regions.
+
+- Missing data points: Both the data sets contain alot of missing data making it extremely challenging and hard to clean. Missing data points are mainly common in columns related to performance metrics. These gaps could be possibly due to incomplete Records and unavailable statistics as for some players certain performance metrics might not have been recorded or reported, especially for those who played in earlier eras or less popular or less documented matches.
+
 
 
 ## Data Wrangling:
-In this section, we will clean and filter the data. This includes converting required columns to numeric data types and filtering the data to include only players who are 35 years or younger (because the average retirement age of a T20I cricketer is around 35 years).
+In this section, we will select, merge, clean and filter the data. This includes selecting relevant columns from both the imported data sets, merging the two data sets, converting required columns to numeric data types, and filtering the data to include only players who are 35 years or younger (because the average retirement age of a T20I cricketer is around 35 years).
 
 ```{r}
 
@@ -48,7 +76,7 @@ In this section, we will clean and filter the data. This includes converting req
 super_cleaned_data <- cricket_data %>% select(NAME, AWARDS, BATTING_T20Is_100, BATTING_T20Is_50, BATTING_T20Is_Ave, BATTING_T20Is_Runs, BATTING_T20s_Ave, BATTING_T20Is_SR, Age)
 cricket_data_role <- old_cricket_data %>% select(NAME, `Playing role`)
 
-# Merge the datasets
+# Merge the data sets
 merged_data <- 
   super_cleaned_data %>%
   inner_join(cricket_data_role, by = "NAME")
